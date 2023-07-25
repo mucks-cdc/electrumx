@@ -2408,35 +2408,6 @@ class DecredTestnet(Decred):
     RPC_PORT = 19109
 
 
-class Strax(Coin):
-    NAME = "Strax"
-    SHORTNAME = "STRAX"
-    NET = "mainnet"
-    XPUB_VERBYTES = bytes.fromhex("02fe52cc")
-    XPRV_VERBYTES = bytes.fromhex("02fe52f8")
-    P2PKH_VERBYTE = bytes.fromhex("4B")
-    P2SH_VERBYTES = (bytes.fromhex("7D"),)
-    WIF_BYTE = bytes.fromhex("cb")
-    GENESIS_HASH = "0000006dd8a92f58e952fa61c9402b74" "a381a69d1930fb5cc12c73273fab5f0a"
-    RPC_PORT = 17104
-    TX_COUNT = 1067887
-    TX_PER_BLOCK = 2
-    TX_COUNT_HEIGHT = 500000
-
-
-class StraxTestnet(Strax):
-    SHORTNAME = "TSTRAX"
-    NET = "testnet"
-    XPUB_VERBYTES = bytes.fromhex("043587cf")
-    XPRV_VERBYTES = bytes.fromhex("04358394")
-    P2PKH_VERBYTE = bytes.fromhex("78")
-    P2SH_VERBYTES = (bytes.fromhex("7D"),)
-    RPC_PORT = 27104
-    TX_COUNT = 1067887
-    TX_PER_BLOCK = 2
-    TX_COUNT_HEIGHT = 500000
-
-
 class Axe(Dash):
     NAME = "Axe"
     SHORTNAME = "AXE"
@@ -2455,6 +2426,7 @@ class Axe(Dash):
     TX_PER_BLOCK = 1
     RPC_PORT = 9337
     REORG_LIMIT = 1000
+    DAEMON = daemon.LegacyRPCDaemon
     PEERS = []
 
     @classmethod
@@ -4196,3 +4168,49 @@ class FerriteTestnet(Ferrite):
         "enode2.ferritecoin.org s t",
         "enode3.ferritecoin.org s t",
     ]
+
+
+class Strax(BitcoinMixin, Coin):
+    NAME = "Strax"
+    SHORTNAME = "STRAX"
+    NET = "mainnet"
+    # same as bitcoin
+    XPUB_VERBYTES = bytes.fromhex("0488b21e")
+    XPRV_VERBYTES = bytes.fromhex("0488ade4")
+
+    P2PKH_VERBYTE = bytes.fromhex("4b")
+    P2SH_VERBYTES = (bytes.fromhex("7d"),)
+    WIF_BYTE = bytes.fromhex("08")
+    # todo find mainnet one
+    GENESIS_HASH = "ebe158d09325c470276619ebc5f7f87c" "98c0ed4b211c46a17a6457655811d082"
+    RPC_PORT = 17104
+    TX_COUNT = 5000000
+    TX_PER_BLOCK = 2
+    TX_COUNT_HEIGHT = 5000000
+    DAEMON = daemon.StraxDaemon
+    DESERIALIZER = lib_tx.DeserializerAuxPowSegWit
+
+    # @classmethod
+    # def header_hash(cls, header):
+    #     '''Given a header return the hash.'''
+    #     header_hex = header.hex()
+    #     header_bytes = bytes.fromhex(header_hex)
+
+        
+
+
+class StraxTestnet(BitcoinTestnetMixin, Strax):
+    SHORTNAME = "TSTRAX"
+    NET = "testnet"
+
+    # same as bitcoin testnet
+    XPUB_VERBYTES = bytes.fromhex("0488b21e")
+    XPRV_VERBYTES = bytes.fromhex("0488ade4")
+
+    P2PKH_VERBYTE = bytes.fromhex("78")
+    P2SH_VERBYTES = (bytes.fromhex("7f"),)
+    WIF_BYTE = bytes.fromhex("08")
+    GENESIS_HASH = "0000db68ff9e74fbaf7654bab4fa702c" "237318428fa9186055c243ddde6354ca"
+    RPC_PORT = 27104
+    TX_COUNT = 1067887
+    TX_COUNT_HEIGHT = 500000

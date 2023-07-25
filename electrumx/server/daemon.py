@@ -548,3 +548,12 @@ class ZcoinMtpDaemon(Daemon):
     async def protx(self, params):
         """Set of commands to execute ProTx related actions."""
         return await self._send_single("protx", params)
+
+
+class StraxDaemon(Daemon):
+    async def raw_blocks(self, hex_hashes):
+        """Return the raw binary blocks with the given hex hashes."""
+        params_iterable = ((h, 0) for h in hex_hashes)
+        blocks = await self._send_vector("getblock", params_iterable)
+        # Convert hex string to bytes
+        return [hex_to_bytes(block) for block in blocks]
