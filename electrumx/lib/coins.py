@@ -263,7 +263,12 @@ class Coin:
     def block(cls, raw_block, height):
         """Return a Block namedtuple given a raw block and its height."""
         header = cls.block_header(raw_block, height)
-        txs = cls.DESERIALIZER(raw_block, start=len(header)).read_tx_block()
+        txs = []
+        try:
+            txs = cls.DESERIALIZER(raw_block, start=len(header)).read_tx_block()
+        except Exception:
+            print("cannot deserialize block at height", height)
+
         return Block(raw_block, header, txs)
 
     @classmethod
@@ -4180,6 +4185,8 @@ class Strax(BitcoinMixin, Coin):
     P2SH_VERBYTES = (bytes.fromhex("7d"),)
     WIF_BYTE = bytes.fromhex("08")
     GENESIS_HASH = "ebe158d09325c470276619ebc5f7f87c" "98c0ed4b211c46a17a6457655811d082"
+    ESTIMATE_FEE = 0.0001
+    RELAY_FEE = 0.0001
     RPC_PORT = 17104
     TX_COUNT = 5000000
     TX_PER_BLOCK = 2

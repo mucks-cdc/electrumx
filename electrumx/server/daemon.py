@@ -550,7 +550,7 @@ class ZcoinMtpDaemon(Daemon):
         return await self._send_single("protx", params)
 
 
-class StraxDaemon(Daemon):
+class StraxDaemon(FakeEstimateFeeDaemon):
     async def raw_blocks(self, hex_hashes):
         """Return the raw binary blocks with the given hex hashes."""
         params_iterable = ((h, 0) for h in hex_hashes)
